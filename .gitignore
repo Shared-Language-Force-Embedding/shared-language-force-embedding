@@ -1,0 +1,27 @@
+# Ignore virtual environments
+venv/
+.python-version
+
+# Ignore all notebooks
+*.ipynb
+
+# By default ignore files in data dir
+data/*
+
+# By default ignore files in notebooks dir
+notebooks/*
+
+# Don't ignore significant files in notebooks dir
+!notebooks/preamble.py
+
+# Ignore Python caches
+__pycache__/
+
+# Ignore VSCode settings directory
+.vscode/
+
+# Ignore .npy files
+*.npy
+
+# Ignore .DS_store files
+*.DS_store
