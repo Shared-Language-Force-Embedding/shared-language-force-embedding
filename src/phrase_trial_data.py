@@ -20,6 +20,8 @@ class PhraseTrialData:
                 phrase_trial_data.position = np.array(phrase_trial_data.position) @ transformation.T
                 phrase_trial_data.velocity = np.array(phrase_trial_data.velocity) @ transformation.T
                 phrase_trial_data.external_force = np.array(phrase_trial_data.external_force) @ transformation.T
+                if not isinstance(phrase_trial_data.internal_force[0], int):
+                    phrase_trial_data.internal_force = np.array(phrase_trial_data.internal_force) @ transformation.T
 
             phrase_trial_data.dt = phrase_trial_data.dt[1:]  # Shift dt
             phrase_trial_data.time = phrase_trial_data.time[:-1]  # Truncate others
@@ -48,7 +50,7 @@ class PhraseTrialData:
         position = np.array(phrase_trial_data.position)
         velocity = np.array(phrase_trial_data.velocity)
         external_force = np.array(phrase_trial_data.external_force)
-        internal_force = np.array(phrase_trial_data.internal_force if phrase_trial_data.internal_force[0] != 0 else [np.zeros(3) for _ in phrase_trial_data.internal_force])
+        internal_force = np.array(phrase_trial_data.internal_force if not isinstance(phrase_trial_data.internal_force[0], int) else [np.zeros(3) for _ in phrase_trial_data.internal_force])
 
         for prefix, array in zip(
             ['position', 'velocity', 'external_force', 'internal_force'],
@@ -92,3 +94,59 @@ class PhraseTrialData:
 
         with open(file_path, 'wb') as file:
             pickle.dump(self, file)
+
+### COPY PASTE BELOW INTO MAIN MODULE
+
+# import time
+
+# class Timer:
+#     def __init__(self) -> None:
+#         self.reset()
+
+#     def dt(self) -> float:
+#         t = self.t()
+#         dt = t - self.last_t
+#         self.last_t = t
+#         return dt
+
+#     def t(self) -> float:
+#         return time.time() - self.start_time
+
+#     def reset(self) -> None:
+#         self.start_time = time.time()
+#         self.last_t = 0.0
+
+
+# class ForceCurve:
+#     def __init__(self, direction, duration, peak_force, ramp_up_pct=0.5, hold_pct=0.0, ramp_down_pct=0.5):
+#         self.direction = direction
+#         self.ramp_up_time = ramp_up_pct * duration
+#         self.hold_time = hold_pct * duration
+#         self.ramp_down_time = ramp_down_pct * duration
+#         self.duration = duration
+#         self.peak_force = peak_force
+#         self.start_time = 0.0
+#         self.stop_time = 0.0
+    
+#     def start(self):
+#         self.start_time = time.time()
+    
+#     def stop(self):
+#         self.stop_time = time.time()
+    
+#     def get_force(self):
+#         t = time.time() - self.start_time
+#         if t <= self.ramp_up_time:
+#             magnitude = self.peak_force * t / self.ramp_up_time
+#         elif t <= self.hold_time:
+#             magnitude = self.peak_force
+#         elif t <= self.ramp_down_time:
+#             magnitude = self.peak_force * (1.0 - (t - self.ramp_up_time - self.hold_time) / self.ramp_down_time)
+#         else:
+#             magnitude = 0.0
+        
+#         is_done = t > self.duration
+#         if is_done:
+#             self.stop()
+
+#         return self.direction * magnitude, is_done

@@ -8,8 +8,8 @@ def get_user_trial_numbers(file_name):
     user_id, trial_number = map(int, name.split('__')[:2])
     return user_id, trial_number
 
-class Phrase2ForceDataset(Dataset):
-    def __init__(self, dir_path, transformation):
+class PhraseForceTrialDataset(Dataset):
+    def __init__(self, dir_path, transformation=None):
         dir = Path(dir_path)
         files = sorted([f for f in dir.iterdir() if f.is_file()], key=lambda f: get_user_trial_numbers(f.name))
 
