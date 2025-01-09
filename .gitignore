@@ -8,6 +8,9 @@ venv/
 # By default ignore files in data dir
 data/*
 
+# By default ignore files in models dir
+models/*
+
 # By default ignore files in notebooks dir
 notebooks/*
 
@@ -15,6 +18,7 @@ notebooks/*
 !notebooks/preamble.py
 !notebooks/prepare_data.ipynb
 !notebooks/model.ipynb
+!notebooks/multimodal_model.ipynb
 
 # Ignore Python caches
 __pycache__/

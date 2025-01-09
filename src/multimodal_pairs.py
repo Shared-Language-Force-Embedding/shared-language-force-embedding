@@ -50,6 +50,9 @@ class MultimodalPairsSampler(Sampler):
         # Set number of samples per epoch
         self.num_samples_per_epoch = num_samples_per_epoch if num_samples_per_epoch else len(dataset)
 
+        if no_action_prob is None:
+            self.no_action_prob = len(self.no_action_indices) / len(dataset)
+
     def __iter__(self):
         """
         Generate indices with specified probabilities for no_action pairs.
