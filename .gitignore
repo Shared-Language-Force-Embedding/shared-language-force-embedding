@@ -16,9 +16,7 @@ notebooks/*
 
 # Don't ignore significant files in notebooks dir
 !notebooks/preamble.py
-!notebooks/prepare_data.ipynb
 !notebooks/model.ipynb
-!notebooks/multimodal_model.ipynb
 
 # Ignore Python caches
 __pycache__/
