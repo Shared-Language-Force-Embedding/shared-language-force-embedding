@@ -19,6 +19,8 @@ notebooks/*
 !notebooks/results.ipynb
 !notebooks/generate_examples.ipynb
 !notebooks/train.ipynb
+!notebooks/demo.ipynb
+!notebooks/wrapper.ipynb
 
 # Ignore Python caches
 __pycache__/
