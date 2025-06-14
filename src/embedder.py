@@ -4,6 +4,8 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 from globals import FORCE_SAMPLE_COUNT, FORCE_CHANNEL_COUNT, DEVICE
+from sentence_transformers import SentenceTransformer
+from typing import List, Tuple
 
 
 class Embedder:
@@ -133,3 +135,32 @@ class GloveEmbedder(Embedder):
         Y = self.label_to_word(Y)
         Y[Y == '<no_word>'] = ''
         return Y
+
+
+class SBERTEmbedder(Embedder):
+    def __init__(self, vocabulary: List[Tuple[str, NDArray]]):
+        self.vocabulary, self.output = zip(*vocabulary)
+        self.sbert = SentenceTransformer('all-mpnet-base-v2', device='cpu')
+        self.embedding_length = 768
+        self.phrase_length = 1
+        self.embeddings = self.sbert.encode(self.vocabulary)
+
+    def embed_force(self, force_data: NDArray) -> Tensor:
+        X = force_data.reshape(force_data.shape[0], -1)
+        return torch.tensor(X, dtype=torch.float32)
+
+    def unembed_force(self, X: Tensor) -> NDArray:
+        X = X.cpu().detach().numpy()
+        force_curve = X.reshape(X.shape[0], FORCE_SAMPLE_COUNT, -1)
+        return force_curve
+
+    def embed_phrase(self, phrase_data: NDArray) -> Tensor:
+        embeddings = self.sbert.encode(phrase_data)
+        return torch.tensor(embeddings, dtype=torch.float32)
+
+    def unembed_phrase(self, Y: Tensor) -> NDArray:
+        Y = Y.cpu().detach().numpy()
+        Y /= np.linalg.norm(Y, axis=1, keepdims=True)
+        phrases = np.array([
+            self.vocabulary[np.argmax(np.sum(embedding * self.embeddings, axis=-1))] for embedding in Y], dtype='U32')
+        return phrases

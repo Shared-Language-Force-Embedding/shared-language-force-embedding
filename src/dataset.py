@@ -67,3 +67,11 @@ class Dataset:
         merged_directions = np.char.lstrip(merged_directions)
         phrase_data = np.stack((phrase_data[:, 0], merged_directions), axis=-1)
         return phrase_data
+
+    def merge_phrase(self, phrase_data: NDArray) -> NDArray:
+        phrase = phrase_data[:, 1]
+        phrase = np.char.add(np.char.add(phrase, ' '), phrase_data[:, 2])
+        phrase = np.char.add(np.char.strip(phrase), '.')
+        phrase = np.char.add(np.char.add(phrase_data[:, 0], ' '), phrase)
+        phrase = np.char.add('Move ', phrase)
+        return phrase

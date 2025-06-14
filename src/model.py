@@ -86,11 +86,11 @@ class MLPModel(Model):
 
         self.force_to_phrase_model = nn.Sequential(
             nn.Linear(FORCE_EMBEDDING_DIM, 512),
-            nn.ReLU(),
-            nn.Dropout(p=0.1),
+            nn.SiLU(),
+            nn.Dropout(p=0.0),
             nn.Linear(512, 128),
-            nn.ReLU(),
-            nn.Dropout(p=0.1),
+            nn.SiLU(),
+            nn.Dropout(p=0.0),
             nn.Linear(128, embedder.embedding_length * embedder.phrase_length)).to(DEVICE)
 
         self.phrase_to_force_model = nn.Sequential(
