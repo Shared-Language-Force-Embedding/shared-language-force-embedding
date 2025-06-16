@@ -8,8 +8,8 @@ venv/
 # By default ignore files in data dir
 data/*
 
-# By default ignore files in models dir
-models/*
+# # By default ignore files in models dir
+# models/*
 
 # By default ignore files in notebooks dir
 notebooks/*
